@@ -46,12 +46,19 @@ public class StartManager : MonoBehaviour
         MoveCoin();
     }
 
-    void MoveCoin()
-    {
-        float x = Random.Range(-700f, 700f);
-        float y = Random.Range(-300f, 250f);
-        coinButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(x, y);
-    }
+   void MoveCoin()
+{
+    RectTransform coinRect = coinButton.GetComponent<RectTransform>();
+    RectTransform area = coinRect.parent as RectTransform;
+
+    float halfW = area.rect.width / 2f - coinRect.rect.width / 2f;
+    float halfH = area.rect.height / 2f - coinRect.rect.height / 2f;
+
+    float x = Random.Range(-halfW, halfW);
+    float y = Random.Range(-halfH, halfH - 150f); // 150 keeps it below the score/goal/timer row
+
+    coinRect.anchoredPosition = new Vector2(x, y);
+}
 
     void Update()
     {
@@ -72,6 +79,6 @@ public class StartManager : MonoBehaviour
         if (score >= goal)
             messageText.text = "You win! Score : " + score;
         else
-            messageText.text = "You lose! Score : " + score;
+            messageText.text = "You lose try again! Score : " + score;
     }
 }
